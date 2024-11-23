@@ -3,6 +3,9 @@
 ## 🎯 Descripción General
 Este proyecto es una herramienta educativa diseñada para generar datos simulados de ventas, enfocada en proporcionar conjuntos de datos realistas para estudiantes, profesores y profesionales en formación en el campo del análisis de datos y business intelligence. La aplicación permite simular operaciones comerciales de diversos tipos de negocios, facilitando el aprendizaje práctico sin la necesidad de datos sensibles reales.
 
+![Portada 0](https://raw.githubusercontent.com/JUANCITOPENA/-Generador-de-Datos-de-Ventas-para-Aprendizaje-y-An-lisis/main/DATOS_0.png)
+![Portada 1](https://raw.githubusercontent.com/JUANCITOPENA/-Generador-de-Datos-de-Ventas-para-Aprendizaje-y-An-lisis/main/DATOS_1.png)
+
 ## 🎓 Propósito Educativo
 
 ### 📚 Áreas de Aprendizaje
