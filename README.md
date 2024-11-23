@@ -223,12 +223,17 @@ Todos los tipos de negocios comparten los siguientes campos base:
 # Clonar repositorio
 git clone https://github.com/usuario/generador-datos-ventas.git
 
-# Instalar dependencias
-pip install -r requirements.txt
+## Instalación de dependencias
+
+Para instalar las bibliotecas necesarias para este proyecto, ejecuta el siguiente comando en la consola:
+
+```bash
+pip install random pandas streamlit datetime os openpyxl
 
 # Ejecutar aplicación
-streamlit run app.py
+streamlit (NOMBRE TU APP) app.py
 ```
+### EN MI CASO : VENTAS_EXCEL.py
 
 ### 🎛️ Configuración
 1. **Selección de Negocio**
