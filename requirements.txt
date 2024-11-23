@@ -1,3 +1,5 @@
 faker
 streamlit
 altair
+openpyxl
+
