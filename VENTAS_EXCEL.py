@@ -493,7 +493,7 @@ num_vendedores = st.number_input("Cantidad de vendedores", min_value=1, max_valu
 num_productos = st.number_input("Cantidad de productos", min_value=1, max_value=50, value=25)
 
 # Parámetros adicionales
-fecha_inicio = st.date_input("Fecha de inicio", value=datetime(2024, 1, 1))
+fecha_inicio = st.date_input("Fecha de inicio", value=datetime(2020, 1, 1))
 fecha_final = st.date_input("Fecha final", value=datetime(2024, 12, 31))
 num_facturas = st.number_input("Cantidad de facturas", min_value=1, max_value=10000,value=100)
 
