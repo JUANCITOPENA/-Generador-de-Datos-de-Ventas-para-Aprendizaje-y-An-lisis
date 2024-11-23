@@ -6,6 +6,10 @@ Este proyecto es una herramienta educativa diseñada para generar datos simulado
 ![Portada 0](https://raw.githubusercontent.com/JUANCITOPENA/-Generador-de-Datos-de-Ventas-para-Aprendizaje-y-An-lisis/main/DATOS_0.png)
 ![Portada 1](https://raw.githubusercontent.com/JUANCITOPENA/-Generador-de-Datos-de-Ventas-para-Aprendizaje-y-An-lisis/main/DATOS_1.png)
 
+## Proyecto en Funcionamiento 🚀
+
+Puedes ver el proyecto funcionando en el siguiente enlace: [Ver Proyecto en Streamlit](https://ventastotales.streamlit.app/) 👨‍💻
+
 ## 🎓 Propósito Educativo
 
 ### 📚 Áreas de Aprendizaje
