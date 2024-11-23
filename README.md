@@ -221,7 +221,7 @@ Todos los tipos de negocios comparten los siguientes campos base:
 ### 💻 Instalación
 ```bash
 # Clonar repositorio
-git clone https://github.com/usuario/generador-datos-ventas.git
+git clone  https://github.com/JUANCITOPENA/-Generador-de-Datos-de-Ventas-para-Aprendizaje-y-An-lisis.git
 
 ## Instalación de dependencias
 
