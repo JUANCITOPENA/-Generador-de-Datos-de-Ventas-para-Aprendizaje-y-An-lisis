@@ -3,8 +3,9 @@ import pandas as pd
 import streamlit as st
 from datetime import datetime, timedelta
 import os
-
+import openpyxl
 # Definición global de productos_base
+
 productos_base = {
     "Comida Rápida": [
         {"nombre": "Hamburguesa", "categoria": "Comida Rápida", "precio_compra": 50, "precio_venta": 90, "stock": 500},
@@ -143,6 +144,7 @@ productos_base = {
         {"nombre": "Nissan Rogue 2022", "categoria": "SUV", "precio_compra": 540000, "precio_venta": 640000, "stock": 2},
         {"nombre": "Kia Sportage 2023", "categoria": "SUV", "precio_compra": 520000, "precio_venta": 620000, "stock": 3}
     ],
+    
     "Ferretería": [
         {"nombre": "Cemento Gris Portland", "categoria": "Construcción", "precio_compra": 380, "precio_venta": 450, "stock": 200},
         {"nombre": "Varilla 3/8 Corrugada", "categoria": "Construcción", "precio_compra": 220, "precio_venta": 280, "stock": 500},
@@ -360,14 +362,31 @@ def generar_entidades(cantidad, regiones, tipo):
             "Héctor López", "Teresa Gutiérrez", "Jorge Escobar", "Camila Vega", "Roberto Almonte",
             "Laura Herrera", "Daniela Peña", "Miguel Cabrera", "Andrea Torres", "Adriana Paredes",
             "Enrique Montalvo", "Vanessa Ortiz", "Lucía Montes", "Pablo Rojas", "Cristina Navarro",
-            "Esteban Méndez", "Liliana Sánchez", "Emilio Vargas", "Alejandra Serrano", "Ángel Carrillo"
+            "Esteban Méndez", "Liliana Sánchez", "Emilio Vargas", "Alejandra Serrano", "Ángel Carrillo",
+            "Sergio Delgado", "Rocío Martínez", "Eduardo Flores", "Marina Castro", "Hugo Romero",
+            "Ángela Medina", "Tomás Pérez", "Mónica Lozano", "Julián Navarro", "Estela Aguirre",
+            "Iván Ramírez", "Clara Domínguez", "Noé Gutiérrez", "Fátima Vargas", "Álvaro Montes",
+            "Beatriz Campos", "Samuel Herrera", "Alicia Cruz", "Rodrigo Ortega", "Eva León",
+            "Oscar Salcedo", "Miriam Rojas", "Bruno Aguayo", "Carolina Silva", "Ignacio Durán",
+            "Raquel Guzmán", "Antonio Espinal", "Inés Almonte", "Sebastián Serrano", "Verónica Méndez",
+            "Álex Reyes", "Irene Cabral", "Mauricio Pimentel", "Olga Ledesma", "Gabriel Ventura",
+            "Cristina Alonso", "Federico Moreno", "Florencia Luna", "Rubén Torres", "Daniel Rivas",
+            "Elisa Castro", "Marco Gálvez", "Tatiana Vega", "Vicente Márquez", "Marisol Ortiz",
+            "Eugenio Rosales", "Paulina Medina", "Adrián Cabrera", "Lourdes Valle", "Ramón Correa"
         ]        ,
         "vendedor": [
-            "Carla Santos", "José Jiménez", "Laura Díaz", "Francisco Peña", "Sofía Castillo",
-            "Miguel Almonte", "Gabriela Torres", "Raúl Méndez", "Lucía Vargas", "Fernando Guerrero",
-            "Liliana Pérez", "Jorge Sánchez", "Esther Molina", "Ángel Rosario", "Valeria De la Cruz",
-            "Víctor Morales", "Claudia Paredes", "Sebastián Ramos", "Daniela Suárez", "Felipe Medina"
-        ],
+            "Ana Fernández", "Juan Pérez", "María González", "Luis Rodríguez", "Carmen López",
+            "José Martínez", "Patricia Jiménez", "Carlos Sánchez", "Laura Romero", "Fernando Díaz",
+            "Sara Castillo", "Pedro Hernández", "Mónica Cruz", "Ricardo Vargas", "Lucía Navarro",
+            "David Peña", "Andrea Torres", "Jorge Méndez", "Claudia Molina", "Felipe Guerrero",
+            "Ángela Morales", "Esteban Ramos", "Isabel Suárez", "Alejandro Medina", "Valentina Ruiz",
+            "Francisco Paredes", "Daniel Romero", "Gabriela Flores", "Sofía Ortega", "Álvaro Gutiérrez",
+            "Lorena Cabrera", "Manuel Ortiz", "Elena Herrera", "Raúl Vásquez", "Adriana Castro",
+            "Nicolás Rivera", "Paula Aguilar", "Héctor Vega", "Rocío Fernández", "Miguel Cruz",
+            "Victoria Gómez", "Diego Silva", "Silvia Moreno", "Tomás Estrada", "Natalia Pérez",
+            "Iván Villalobos", "Jimena León", "Santiago Domínguez", "Renata Lara", "Camila Duarte"
+        ]
+
         
     }
 
@@ -378,13 +397,17 @@ def generar_entidades(cantidad, regiones, tipo):
 
 # Función modificada para generar productos solo del tipo de negocio seleccionado
 def generar_productos(cantidad, tipo_negocio):
-    # Obtener solo los productos del tipo de negocio seleccionado
+    if tipo_negocio not in productos_base:
+        st.error(f"No hay productos definidos para el tipo de negocio: {tipo_negocio}")
+        return []
+
     productos_disponibles = productos_base[tipo_negocio]
-    # Generar lista de productos con copias profundas para no modificar los originales
+    if not productos_disponibles:
+        st.error(f"La categoría seleccionada '{tipo_negocio}' no tiene productos disponibles.")
+        return []
+
     productos_seleccionados = []
-    
     for _ in range(cantidad):
-        # Seleccionar un producto aleatorio y crear una copia de sus datos
         producto_original = random.choice(productos_disponibles)
         producto_copia = {
             "nombre": producto_original["nombre"],
@@ -394,8 +417,9 @@ def generar_productos(cantidad, tipo_negocio):
             "stock": producto_original["stock"]
         }
         productos_seleccionados.append(producto_copia)
-    
+
     return productos_seleccionados
+
 
 
 # Función para generar datos de ventas
@@ -415,13 +439,16 @@ def generar_datos_ventas(fecha_inicio, fecha_final, num_facturas, clientes, vend
         cliente = random.choice(clientes)
         region = cliente["region"]
 
-        # Filtrar vendedores por la misma región que el cliente
+        # Filtrar vendedores por región
         vendedores_en_region = [v for v in vendedores if v["region"] == region]
         if not vendedores_en_region:
-            continue
+            # Si no hay vendedores en la región, elige uno aleatorio
+            vendedor = random.choice(vendedores)
+        else:
+            vendedor = random.choice(vendedores_en_region)
 
-        vendedor = random.choice(vendedores_en_region)
-        num_productos = random.randint(1, 5)
+        # Generar entre 1 y 8 productos por factura
+        num_productos = random.randint(1, 8)
         fecha = fecha_inicio + timedelta(days=random.randint(0, delta.days))
         tipo_pago_seleccionado = random.choice(tipo_pago)
         tipo_compra_seleccionado = random.choice(tipo_compra)
@@ -430,51 +457,51 @@ def generar_datos_ventas(fecha_inicio, fecha_final, num_facturas, clientes, vend
             producto = random.choice(productos)
             cantidad = random.randint(1, 10)
 
-            # Asegurar que la cantidad no exceda el stock disponible
-            if producto["stock"] > 0:  # Solo procesar si hay stock disponible
-                cantidad = min(cantidad, producto["stock"])
-                stock_actual = producto["stock"] - cantidad
-                producto["stock"] = stock_actual
+            # Si no hay stock suficiente, fuerza el registro con 1 unidad
+            if producto["stock"] <= 0:
+                cantidad = 1
 
-                subtotal = cantidad * producto["precio_venta"]
-                itbis = round(subtotal * 0.18, 2)
-                total = subtotal + itbis
+            # Ajustar stock
+            producto["stock"] = max(0, producto["stock"] - cantidad)
 
-                # Cálculos adicionales
-                costo = cantidad * producto["precio_compra"]  # Costo = Cantidad * Precio de Compra
-                margen = total - costo  # Margen = Total - Costo
-               # Calculando porcentaje de margen como un valor decimal
-                porcentaje_margen = (margen / total) if total > 0 else 0  
-                
-                # Generar un ID único para cada fila
-                id_unico = id_counter
-                id_counter += 1
+            subtotal = cantidad * producto["precio_venta"]
+            itbis = round(subtotal * 0.18, 2)
+            total = subtotal + itbis
 
-                datos_ventas.append({
-                    "ID": id_unico,  # Agregar la columna ID
-                    "FECHA": fecha.strftime("%Y-%m-%d"),
-                    "FACTURA": factura_id,
-                    "REGION": region,
-                    "CLIENTE": cliente["nombre"],
-                    "TIPO_PAGO": tipo_pago_seleccionado,
-                    "VENDEDOR": vendedor["nombre"],
-                    "TIPO_COMPRA": tipo_compra_seleccionado,
-                    "PRODUCTO": producto["nombre"],
-                    "CATEGORIA": producto["categoria"],
-                    "EXISTENCIA": producto["stock"] + cantidad,
-                    "PRECIO_COMPRA": producto["precio_compra"],
-                    "PRECIO_VENTAS": producto["precio_venta"],
-                    "CANTIDAD": cantidad,
-                    "SUBTOTAL": subtotal,
-                    "ITBIS": itbis,
-                    "TOTAL": total,
-                    "STOCK": stock_actual,
-                    "COSTO": costo,
-                    "MARGEN": margen,
-                    "% MARGEN": round(porcentaje_margen, 2)
-                })
+            # Cálculos adicionales
+            costo = cantidad * producto["precio_compra"]
+            margen = total - costo
+            porcentaje_margen = (margen / total) if total > 0 else 0
+
+            datos_ventas.append({
+                "ID": id_counter,
+                "FECHA": fecha.strftime("%Y-%m-%d"),
+                "FACTURA": factura_id,
+                "REGION": region,
+                "CLIENTE": cliente["nombre"],
+                "TIPO_PAGO": tipo_pago_seleccionado,
+                "VENDEDOR": vendedor["nombre"],
+                "TIPO_COMPRA": tipo_compra_seleccionado,
+                "PRODUCTO": producto["nombre"],
+                "CATEGORIA": producto["categoria"],
+                "EXISTENCIA": producto["stock"] + cantidad,
+                "PRECIO_COMPRA": producto["precio_compra"],
+                "PRECIO_VENTAS": producto["precio_venta"],
+                "CANTIDAD": cantidad,
+                "SUBTOTAL": subtotal,
+                "ITBIS": itbis,
+                "TOTAL": total,
+                "STOCK": producto["stock"],
+                "COSTO": costo,
+                "MARGEN": margen,
+                "% MARGEN": round(porcentaje_margen, 2)
+            })
+
+            # Incrementar el contador de ID único
+            id_counter += 1
 
     return pd.DataFrame(datos_ventas)
+
 
 # Interfaz en Streamlit
 st.markdown(
@@ -488,14 +515,14 @@ st.markdown(
 tipo_negocio = st.selectbox("Selecciona el tipo de negocio", list(productos_base.keys()))
 
 # Parámetros para clientes, vendedores, productos
-num_clientes = st.number_input("Cantidad de clientes", min_value=1, max_value=50, value=25)
-num_vendedores = st.number_input("Cantidad de vendedores", min_value=1, max_value=25, value=15)
+num_clientes = st.number_input("Cantidad de clientes", min_value=1, max_value=75, value=35)
+num_vendedores = st.number_input("Cantidad de vendedores", min_value=1, max_value=50, value=15)
 num_productos = st.number_input("Cantidad de productos", min_value=1, max_value=50, value=25)
 
 # Parámetros adicionales
 fecha_inicio = st.date_input("Fecha de inicio", value=datetime(2020, 1, 1))
 fecha_final = st.date_input("Fecha final", value=datetime(2024, 12, 31))
-num_facturas = st.number_input("Cantidad de facturas", min_value=1, max_value=10000,value=100)
+num_facturas = st.number_input("Cantidad de facturas", min_value=1, max_value=10000,value=1000)
 
 # Botones para generar y guardar datos
 if st.button("Generar Datos"):
